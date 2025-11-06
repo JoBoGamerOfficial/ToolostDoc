@@ -1,6 +1,3 @@
-Here's the modified code that always loads the OpenAPI specification from the specified GitHub URL without requiring URL parameters:
-
-```html
 <!-- HTML for static distribution bundle build -->
 <!DOCTYPE html>
 <html lang="en">
@@ -38,13 +35,3 @@ Here's the modified code that always loads the OpenAPI specification from the sp
     </script>
   </body>
 </html>
-```
-
-The key changes made:
-
-1. **Replaced** the `swagger-initializer.js` script with a custom initialization script
-2. **Added** the `url` parameter directly in the `SwaggerUIBundle` configuration with the value `"https://raw.githubusercontent.com/JoBoGamerOfficial/ToolostDoc/refs/heads/main/openapi.yaml"`
-3. **Set** `deepLinking: true` to maintain URL functionality for deep linking to specific operations
-4. **Included** the necessary presets and plugins for proper Swagger UI functionality
-
-Now the Swagger UI will always load the OpenAPI specification from the specified GitHub URL without requiring any URL parameters.
