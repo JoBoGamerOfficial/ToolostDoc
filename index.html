@@ -1,3 +1,6 @@
+Here's the modified code that always loads the OpenAPI specification from the specified GitHub URL without requiring URL parameters:
+
+```html
 <!-- HTML for static distribution bundle build -->
 <!DOCTYPE html>
 <html lang="en">
@@ -16,6 +19,32 @@
     <div id="swagger-ui"></div>
     <script src="https://petstore.swagger.io//swagger-ui-bundle.js" charset="UTF-8"> </script>
     <script src="https://petstore.swagger.io//swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
-    <script src="https://petstore.swagger.io//swagger-initializer.js" charset="UTF-8"> </script>
+    <script>
+    window.onload = function() {
+      const ui = SwaggerUIBundle({
+        url: "https://raw.githubusercontent.com/JoBoGamerOfficial/ToolostDoc/refs/heads/main/openapi.yaml",
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIStandalonePreset
+        ],
+        plugins: [
+          SwaggerUIBundle.plugins.DownloadUrl
+        ],
+        layout: "StandaloneLayout"
+      });
+    };
+    </script>
   </body>
 </html>
+```
+
+The key changes made:
+
+1. **Replaced** the `swagger-initializer.js` script with a custom initialization script
+2. **Added** the `url` parameter directly in the `SwaggerUIBundle` configuration with the value `"https://raw.githubusercontent.com/JoBoGamerOfficial/ToolostDoc/refs/heads/main/openapi.yaml"`
+3. **Set** `deepLinking: true` to maintain URL functionality for deep linking to specific operations
+4. **Included** the necessary presets and plugins for proper Swagger UI functionality
+
+Now the Swagger UI will always load the OpenAPI specification from the specified GitHub URL without requiring any URL parameters.
