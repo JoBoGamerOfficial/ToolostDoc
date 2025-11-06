@@ -252,65 +252,105 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /portal/release:
-    get:
-      summary: Retrieve releases from Toolost
-      description: |
-        Retrieves a paginated list of music releases from the Toolost API.  
-        This endpoint supports searching, filtering, sorting, and pagination.
-      tags: [Releases]
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: page
-          in: query
-          description: Page number for pagination
-          schema:
-            type: integer
-            default: 1
-        - name: search
-          in: query
-          description: Search keyword (e.g., release title)
-          schema:
-            type: string
-            default: ""
-        - name: searchType
-          in: query
-          description: Field to search by (default is "Release Title")
-          schema:
-            type: string
-            default: "Release Title"
-        - name: filter
-          in: query
-          description: Filter results (e.g., "All")
-          schema:
-            type: string
-            default: "All"
-        - name: sort
-          in: query
-          description: Sort order for releases (e.g., "Late")
-          schema:
-            type: string
-            default: "Late"
-      responses:
-        200:
-          description: List of releases successfully retrieved
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ReleaseListResponse"
-        401:
-          description: Unauthorized - Invalid or missing bearer token
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        500:
-          description: Server error retrieving releases
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+  
+  #/api/portal/dashboard/wallet:
+  get:
+    summary: "Get User Wallet Balance"
+    description: "Retrieve current wallet balance and financial information for the authenticated user"
+    tags:
+      - Authentication
+      - Finance
+    security:
+      - BearerAuth: []
+    operationId: "getWalletBalance"
+    responses:
+      '200':
+        description: "Wallet balance information retrieved successfully"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Balance"
+      '401':
+        $ref: "#/components/schemas/Error"
+      '403':
+        $ref: "#/components/schemas/Error"
+
+#/components/schemas/Balance.json
+type: object
+required:
+  - balance
+properties:
+  balance:
+    type: object
+    required:
+      - available
+      - earnings
+      - payouts
+      - sales
+    properties:
+      available:
+        type: number
+        format: float
+        description: Available balance in the wallet
+        example: 12.37
+      earnings:
+        type: number
+        format: float
+        description: Total earnings
+        example: 26.00
+      adjustment:
+        type: number
+        format: float
+        nullable: true
+        description: Balance adjustment
+        example: 0
+      manual_entry:
+        type: number
+        format: float
+        nullable: true
+        description: Manual entry balance
+        example: 0
+      wallet_incoming:
+        type: number
+        format: float
+        nullable: true
+        description: Total incoming payments
+        example: 0
+      wallet_outgoing:
+        type: number
+        format: float
+        nullable: true
+        description: Total outgoing payments
+        example: 0
+      payouts:
+        type: number
+        format: float
+        description: Total payouts
+        example: 12.63
+      sales:
+        type: number
+        format: float
+        description: Total sales
+        example: 26.00
+      publishing:
+        type: number
+        format: float
+        nullable: true
+        description: Publishing earnings
+        example: 0
+      cover_licensing_refund:
+        type: number
+        format: float
+        nullable: true
+        description: Cover licensing refunds
+        example: 0
+      youtube_mcn:
+        type: number
+        format: float
+        nullable: true
+        description: YouTube MCN earnings
+        example: 0
 
 security:
   - bearerAuth: []
+
