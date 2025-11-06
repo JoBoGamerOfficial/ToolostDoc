@@ -70,6 +70,125 @@ components:
         - status
         - token
 
+    Release:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 630245
+        title:
+          type: string
+          example: "Curses"
+        created_at:
+          type: string
+          format: date-time
+          example: "2025-01-20T17:34:08.000000Z"
+        cover_url:
+          type: string
+          format: uri
+          nullable: true
+          example: "https://toolost.s3.us-east-2.amazonaws.com/artworks/example.jpg"
+        status:
+          type: integer
+          example: 1
+        release_date:
+          type: string
+          format: date
+          example: "2025-01-24"
+        upc:
+          type: string
+          example: "0693887662098"
+        catalog_number:
+          type: string
+          example: "TOOLOST3000630245"
+        label:
+          type: string
+          example: "JoBo Gamer Records"
+        language:
+          type: string
+          example: "en"
+        primary_genre:
+          type: string
+          example: "Rock"
+        secondary_genre:
+          type: string
+          nullable: true
+          example: "Jazz"
+        remix_or_version:
+          type: string
+          nullable: true
+          example: null
+        type:
+          type: string
+          example: "Single"
+        c_line:
+          type: string
+          example: "JoBo Gamer Records"
+        c_year:
+          type: string
+          example: "2025"
+        p_line:
+          type: string
+          example: "JoBo Gamer Records"
+        p_year:
+          type: string
+          example: "2025"
+        smartlink:
+          type: object
+          nullable: true
+          properties:
+            id:
+              type: integer
+              example: 511846
+            short_id:
+              type: string
+              example: "curses"
+            release_id:
+              type: string
+              example: "630245"
+        participants:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "JoBo Gamer"
+              id:
+                type: integer
+                example: 1285472
+              role:
+                type: string
+                example: "primary"
+
+    ReleaseListResponse:
+      type: object
+      properties:
+        submissions:
+          type: object
+          properties:
+            current_page:
+              type: integer
+              example: 1
+            data:
+              type: array
+              items:
+                $ref: "#/components/schemas/Release"
+            total:
+              type: integer
+              example: 55
+            per_page:
+              type: integer
+              example: 8
+            last_page:
+              type: integer
+              example: 7
+            next_page_url:
+              type: string
+              format: uri
+              nullable: true
+              example: "http://toolost.com/api/portal/release?page=2"
+
 paths:
   /auth/login:
     post:
@@ -83,10 +202,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/LoginRequest"
-            example:
-              email: "user@example.com"
-              password: "password123"
-              googleCaptchaToken: null
       responses:
         200:
           description: Login successful
@@ -94,32 +209,23 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/LoginResponse"
-              example:
-                status: "success"
-                token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
         404:
           description: Invalid credentials
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Invalid email or password"
-                code: 401
         500:
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                error: "Login service unavailable"
-                code: 500
 
   /auth/me:
     get:
       summary: Get current authenticated user profile
-      description: Returns detailed information about the currently authenticated user including personal details, subscription status, payment methods, and account settings
+      description: Returns detailed information about the currently authenticated user
       tags: [Authentication]
       security:
         - bearerAuth: []
@@ -133,122 +239,6 @@ paths:
                 properties:
                   user:
                     type: object
-                    properties:
-                      id:
-                        type: integer
-                        example: 10234
-                      email:
-                        type: string
-                        format: email
-                        example: "john.doe@example.com"
-                      first_name:
-                        type: string
-                        nullable: true
-                        example: "John"
-                      last_name:
-                        type: string
-                        nullable: true
-                        example: "Doe"
-                      username:
-                        type: string
-                        nullable: true
-                        example: "johndoe"
-                      type:
-                        type: string
-                        example: "customer"
-                      created_at:
-                        type: string
-                        format: date-time
-                        example: "2024-06-15T14:23:11Z"
-                      updated_at:
-                        type: string
-                        format: date-time
-                        example: "2025-01-09T09:42:37Z"
-                      stripe_id:
-                        type: string
-                        example: "cus_9AbCDefGhijk123"
-                      admin_access:
-                        type: integer
-                        example: 0
-                      priority_member:
-                        type: integer
-                        example: 0
-                      banned:
-                        type: integer
-                        example: 0
-                      details:
-                        type: object
-                        properties:
-                          first_name:
-                            type: string
-                            example: "John"
-                          last_name:
-                            type: string
-                            example: "Doe"
-                          display_name:
-                            type: string
-                            example: "John D."
-                          country:
-                            type: string
-                            example: "United States"
-                          city:
-                            type: string
-                            example: "New York"
-                          postal_code:
-                            type: string
-                            example: "10001"
-                      label:
-                        type: object
-                        properties:
-                          label_name:
-                            type: string
-                            example: "Doe Music Co."
-                          profile_img:
-                            type: string
-                            format: uri
-                            example: "https://example.com/images/johndoe.jpg"
-                          about:
-                            type: string
-                            example: "Independent artist and producer."
-                      subscriptions:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            id:
-                              type: integer
-                              example: 98765
-                            type:
-                              type: string
-                              example: "Standard"
-                            stripe_status:
-                              type: string
-                              example: "active"
-                            ends_at:
-                              type: string
-                              format: date-time
-                              example: "2025-12-31T23:59:59Z"
-                            items:
-                              type: array
-                              items:
-                                type: object
-                                properties:
-                                  stripe_price:
-                                    type: string
-                                    example: "price_ABC123XYZ456"
-                  subscription:
-                    type: object
-                    properties:
-                      active:
-                        type: boolean
-                        example: true
-                      grace_period:
-                        type: boolean
-                        example: false
-                  notifications:
-                    type: array
-                    items:
-                      type: object
         401:
           description: Unauthorized - Invalid or missing token
           content:
@@ -261,6 +251,66 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+
+  /portal/release:
+    get:
+      summary: Retrieve releases from Toolost
+      description: |
+        Retrieves a paginated list of music releases from the Toolost API.  
+        This endpoint supports searching, filtering, sorting, and pagination.
+      tags: [Releases]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Page number for pagination
+          schema:
+            type: integer
+            default: 1
+        - name: search
+          in: query
+          description: Search keyword (e.g., release title)
+          schema:
+            type: string
+            default: ""
+        - name: searchType
+          in: query
+          description: Field to search by (default is "Release Title")
+          schema:
+            type: string
+            default: "Release Title"
+        - name: filter
+          in: query
+          description: Filter results (e.g., "All")
+          schema:
+            type: string
+            default: "All"
+        - name: sort
+          in: query
+          description: Sort order for releases (e.g., "Late")
+          schema:
+            type: string
+            default: "Late"
+      responses:
+        200:
+          description: List of releases successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReleaseListResponse"
+        401:
+          description: Unauthorized - Invalid or missing bearer token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Server error retrieving releases
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
 security:
   - bearerAuth: []
