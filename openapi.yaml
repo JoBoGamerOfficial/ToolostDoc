@@ -18,7 +18,7 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-  
+
   schemas:
     Error:
       type: object
@@ -32,7 +32,7 @@ components:
       required:
         - error
         - code
-    
+
     LoginRequest:
       type: object
       required:
@@ -54,7 +54,7 @@ components:
           nullable: true
           description: Google reCAPTCHA token (optional)
           example: null
-    
+
     LoginResponse:
       type: object
       properties:
@@ -76,13 +76,13 @@ paths:
       summary: User login to obtain bearer token
       description: Authenticates user with email and password to receive JWT token for accessing protected endpoints
       tags: [Authentication]
-      security: []  # No auth required for login
+      security: [] # No auth required for login
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginRequest'
+              $ref: "#/components/schemas/LoginRequest"
             example:
               email: "user@example.com"
               password: "password123"
@@ -93,7 +93,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LoginResponse'
+                $ref: "#/components/schemas/LoginResponse"
               example:
                 status: "success"
                 token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
@@ -102,7 +102,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               example:
                 error: "Invalid email or password"
                 code: 401
@@ -111,7 +111,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
               example:
                 error: "Login service unavailable"
                 code: 500
@@ -249,13 +249,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              $ref: "#/components/schemas/Error"
       403:
         description: Forbidden - User not authenticated
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              $ref: "#/components/schemas/Error"
 security:
-
   - bearerAuth: []
