@@ -1,0 +1,120 @@
+openapi: 3.0.0
+info:
+  title: Toolost API
+  description: API for Toolost platform
+  version: 1.0.0
+  contact:
+    name: Toolost Support
+    url: https://toolost.com/support
+    email: support@toolost.com
+
+servers:
+  - url: https://toolost.com/api
+    description: Production server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+        code:
+          type: integer
+          description: HTTP status code
+      required:
+        - error
+        - code
+    
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          description: User email address
+          example: user@example.com
+        password:
+          type: string
+          format: password
+          description: User password
+          example: "password123"
+        googleCaptchaToken:
+          type: string
+          nullable: true
+          description: Google reCAPTCHA token (optional)
+          example: null
+    
+    LoginResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Response status
+          example: "success"
+        token:
+          type: string
+          description: JWT bearer token for authentication
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+      required:
+        - status
+        - token
+
+paths:
+  /auth/login:
+    post:
+      summary: User login to obtain bearer token
+      description: Authenticates user with email and password to receive JWT token for accessing protected endpoints
+      tags: [Authentication]
+      security: []  # No auth required for login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              email: "user@example.com"
+              password: "password123"
+              googleCaptchaToken: null
+      responses:
+        200:
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+              example:
+                status: "success"
+                token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        401:
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Invalid email or password"
+                code: 401
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Login service unavailable"
+                code: 500
+
+security:
+  - bearerAuth: []
