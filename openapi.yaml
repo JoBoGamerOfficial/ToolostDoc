@@ -299,7 +299,7 @@ components:
                     example: 1001
                   type:
                     type: string
-                    example: "Visa ending in 5304"
+                    example: "Visa ending in 1234"
                   default:
                     type: boolean
                     example: true
@@ -612,3 +612,4 @@ paths:
 
 security:
   - bearerAuth: []
+
