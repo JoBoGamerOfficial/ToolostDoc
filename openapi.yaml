@@ -115,7 +115,7 @@ paths:
               example:
                 error: "Login service unavailable"
                 code: 500
-/auth/me:
+  /auth/me:
   get:
     summary: Get current authenticated user profile
     description: Returns detailed information about the currently authenticated user including personal details, subscription status, payment methods, and account settings
@@ -249,12 +249,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: '#/components/schemas/Error'
       403:
         description: Forbidden - User not authenticated
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Error"
+              $ref: '#/components/schemas/Error'
+
 security:
   - bearerAuth: []
+
