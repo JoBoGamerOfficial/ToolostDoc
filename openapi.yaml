@@ -97,7 +97,7 @@ paths:
               example:
                 status: "success"
                 token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-        401:
+        404:
           description: Invalid credentials
           content:
             application/json:
@@ -135,35 +135,37 @@ paths:
                   properties:
                     id:
                       type: integer
-                      example: 1
+                      example: 10234
                     email:
                       type: string
                       format: email
-                      example: "john.doe@email.com"
+                      example: "john.doe@example.com"
                     first_name:
                       type: string
                       nullable: true
-                      example: null
+                      example: "John"
                     last_name:
                       type: string
                       nullable: true
-                      example: null
+                      example: "Doe"
                     username:
                       type: string
                       nullable: true
-                      example: null
+                      example: "johndoe"
                     type:
                       type: string
-                      example: "label"
+                      example: "customer"
                     created_at:
                       type: string
                       format: date-time
+                      example: "2024-06-15T14:23:11Z"
                     updated_at:
                       type: string
                       format: date-time
+                      example: "2025-01-09T09:42:37Z"
                     stripe_id:
                       type: string
-                      example: "cus_XXXXXXXXX"
+                      example: "cus_9AbCDefGhijk123"
                     admin_access:
                       type: integer
                       example: 0
@@ -184,29 +186,29 @@ paths:
                           example: "Doe"
                         display_name:
                           type: string
-                          example: "John Doe"
+                          example: "John D."
                         country:
                           type: string
-                          example: "United Kingdom"
+                          example: "United States"
                         city:
                           type: string
-                          example: "London"
+                          example: "New York"
                         postal_code:
                           type: string
-                          example: "AB12 3CD"
+                          example: "10001"
                     label:
                       type: object
                       properties:
                         label_name:
                           type: string
-                          example: "Prism Records"
+                          example: "Doe Music Co."
                         profile_img:
                           type: string
                           format: uri
-                          example: "https://toolost.s3.us-east-2.amazonaws.com/preferences/labels/e6d6854b4af1e859a5e9.jpg"
+                          example: "https://example.com/images/johndoe.jpg"
                         about:
                           type: string
-                          example: "Discovering Tomorrow's Sound Today"
+                          example: "Independent artist and producer."
                     subscriptions:
                       type: array
                       items:
@@ -214,15 +216,17 @@ paths:
                         properties:
                           id:
                             type: integer
+                            example: 98765
                           type:
                             type: string
-                            example: "Premium"
+                            example: "Standard"
                           stripe_status:
                             type: string
                             example: "active"
                           ends_at:
                             type: string
                             format: date-time
+                            example: "2025-12-31T23:59:59Z"
                           items:
                             type: array
                             items:
@@ -230,7 +234,7 @@ paths:
                               properties:
                                 stripe_price:
                                   type: string
-                                  example: "price_XXXXXXXXXXXXXXXXXX"
+                                  example: "price_ABC123XYZ456"
                 subscription:
                   type: object
                   properties:
@@ -256,7 +260,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Error'
-
 security:
   - bearerAuth: []
+
 
