@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.0.3
 info:
   title: Toolost API
-  description: API for Toolost platform
+  description: API documentation for Toolost platform and services.
   version: 1.0.7
   contact:
     name: Toolost Support
@@ -18,20 +18,27 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+      description: Bearer token authentication for API requests.
 
   schemas:
     Error:
       type: object
       properties:
-        error:
-          type: string
-          description: Error message
         code:
           type: integer
           description: HTTP status code
+          example: 401
+        error:
+          type: string
+          description: Error message
+          example: "Unauthorized"
+        details:
+          type: string
+          description: Additional error details
+          example: "Invalid or missing token"
       required:
-        - error
         - code
+        - error
 
     LoginRequest:
       type: object
@@ -69,6 +76,273 @@ components:
       required:
         - status
         - token
+
+    User:
+      type: object
+      required:
+        - user
+      properties:
+        user:
+          type: object
+          required:
+            - id
+            - email
+            - subscriptions
+          properties:
+            id:
+              type: integer
+              example: 67526
+            email:
+              type: string
+              format: email
+              example: "john.doe@example.com"
+            first_name:
+              type: string
+              nullable: true
+              example: "John"
+            last_name:
+              type: string
+              nullable: true
+              example: "Doe"
+            username:
+              type: string
+              nullable: true
+              example: "john_doe"
+            type:
+              type: string
+              example: "customer"
+            created_at:
+              type: string
+              format: date-time
+              example: "2023-01-20T12:04:45.000000Z"
+            updated_at:
+              type: string
+              format: date-time
+              example: "2023-07-26T11:06:59.000000Z"
+            stripe_id:
+              type: string
+              example: "cus_RcYs2WwoAjDZI4"
+            stripe_status:
+              type: string
+              example: "active"
+            ends_at:
+              type: string
+              format: date-time
+              example: "2024-06-20T00:00:00.000000Z"
+            pm_type:
+              type: string
+              example: "visa"
+            pm_last_four:
+              type: string
+              example: "5304"
+            is_audio_scan_enable:
+              type: boolean
+              example: true
+            balance:
+              type: string
+              format: float
+              example: "12.37"
+            details:
+              type: object
+              properties:
+                display_name:
+                  type: string
+                  example: "john_doe"
+                steralis_id:
+                  type: string
+                  example: "987654"
+                label_id:
+                  type: string
+                  example: "1234"
+                joining_since:
+                  type: string
+                  format: date
+                  example: "2023-01-20"
+                product_count:
+                  type: integer
+                  example: 24
+                license_count:
+                  type: integer
+                  example: 32
+                conversion_point:
+                  type: integer
+                  example: 48
+                is_elite_verified:
+                  type: boolean
+                  example: true
+                tier:
+                  type: string
+                  example: "PRO"
+                current_status:
+                  type: string
+                  example: "verified"
+                verification_progress:
+                  type: string
+                  example: "complete"
+            label:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 7915
+                name:
+                  type: string
+                  example: "Prism Records"
+                profile_img:
+                  type: string
+                  format: uri
+                  example: "https://toolost.s3.us-east-2.amazonaws.com/preferences/labels/e6d6854b4af1e859a5e9.jpg"
+                about:
+                  type: string
+                  example: "Discovering Tomorrow's Sound Today"
+                website:
+                  type: string
+                  example: "https://prismrecords.com"
+            subscriptions:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1001
+                  type:
+                    type: string
+                    example: "Premium"
+                  stripe_status:
+                    type: string
+                    example: "active"
+                  created_at:
+                    type: string
+                    format: date-time
+                    example: "2023-05-15T10:30:00.000000Z"
+                  next_payment_date:
+                    type: string
+                    format: date-time
+                    example: "2023-06-15T00:00:00.000000Z"
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        price:
+                          type: string
+                          example: "price_1I5i3EFr0pXt9moM4WU7Tqma"
+                        quantity:
+                          type: integer
+                          example: 1
+            notifications:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 101
+                  title:
+                    type: string
+                    example: "New Payment"
+                  message:
+                    type: string
+                    example: "You received a payment of $5.99"
+                  read_at:
+                    type: string
+                    format: date-time
+                    example: "2023-05-16T11:30:00.000000Z"
+
+    Balance:
+      type: object
+      required:
+        - balance
+      properties:
+        balance:
+          type: object
+          properties:
+            available:
+              type: number
+              format: float
+              example: 10.50
+            total_earnings:
+              type: number
+              format: float
+              example: 26.75
+            adjustment:
+              type: number
+              format: float
+              example: 0.00
+            pending_withdrawals:
+              type: number
+              format: float
+              example: 0.00
+            payouts_this_month:
+              type: number
+              format: float
+              example: 8.75
+            stripe_balances:
+              type: object
+              properties:
+                available_on_next_payout:
+                  type: number
+                  format: float
+                  example: 5.25
+                pending:
+                  type: number
+                  format: float
+                  example: 2.50
+            payment_methods:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1001
+                  type:
+                    type: string
+                    example: "Visa ending in 5304"
+                  default:
+                    type: boolean
+                    example: true
+                  last_used_at:
+                    type: string
+                    format: date-time
+                    example: "2023-10-07T15:30:00.000000Z"
+            royalty_status:
+              type: object
+              properties:
+                is_eligible:
+                  type: boolean
+                  example: true
+                rate:
+                  type: number
+                  format: float
+                  example: 0.85
+                last_update:
+                  type: string
+                  format: date-time
+                  example: "2023-09-30T10:00:00.000000Z"
+            conversion_history:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1001
+                  date:
+                    type: string
+                    format: date-time
+                    example: "2023-10-07T15:30:00.000000Z"
+                  amount:
+                    type: number
+                    format: float
+                    example: 5.99
+                  currency:
+                    type: string
+                    example: "USD"
+                  status:
+                    type: string
+                    example: "completed"
 
     Release:
       type: object
@@ -189,93 +463,13 @@ components:
               nullable: true
               example: "http://toolost.com/api/portal/release?page=2"
 
-
-Balance:
-      type: object
-required:
-  - balance
-properties:
-  balance:
-    type: object
-    required:
-      - available
-      - earnings
-      - payouts
-      - sales
-    properties:
-      available:
-        type: number
-        format: float
-        description: Available balance in the wallet
-        example: 12.37
-      earnings:
-        type: number
-        format: float
-        description: Total earnings
-        example: 26.00
-      adjustment:
-        type: number
-        format: float
-        nullable: true
-        description: Balance adjustment
-        example: 0
-      manual_entry:
-        type: number
-        format: float
-        nullable: true
-        description: Manual entry balance
-        example: 0
-      wallet_incoming:
-        type: number
-        format: float
-        nullable: true
-        description: Total incoming payments
-        example: 0
-      wallet_outgoing:
-        type: number
-        format: float
-        nullable: true
-        description: Total outgoing payments
-        example: 0
-      payouts:
-        type: number
-        format: float
-        description: Total payouts
-        example: 12.63
-      sales:
-        type: number
-        format: float
-        description: Total sales
-        example: 26.00
-      publishing:
-        type: number
-        format: float
-        nullable: true
-        description: Publishing earnings
-        example: 0
-      cover_licensing_refund:
-        type: number
-        format: float
-        nullable: true
-        description: Cover licensing refunds
-        example: 0
-      youtube_mcn:
-        type: number
-        format: float
-        nullable: true
-        description: YouTube MCN earnings
-        example: 0
-
-
-
-              
 paths:
   /auth/login:
     post:
-      summary: User login to obtain bearer token
-      description: Authenticates user with email and password to receive JWT token for accessing protected endpoints
+      summary: "User login to obtain bearer token"
+      description: "Authenticates user with email and password to receive JWT token for accessing protected endpoints"
       tags: [Authentication]
-      security: [] # No auth required for login
+      security: []
       requestBody:
         required: true
         content:
@@ -304,39 +498,64 @@ paths:
 
   /auth/me:
     get:
-      summary: Get current authenticated user profile
-      description: Returns detailed information about the currently authenticated user
+      summary: "Get Current User Profile"
+      description: "Retrieve detailed information about the authenticated user"
       tags: [Authentication]
       security:
         - bearerAuth: []
       responses:
         200:
-          description: User profile retrieved successfully
+          description: "User profile retrieved successfully"
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  user:
-                    type: object
+                $ref: '#/components/schemas/User'
         401:
-          description: Unauthorized - Invalid or missing token
+          description: "Unauthorized - Invalid or missing token"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
         403:
-          description: Forbidden - User not authenticated
+          description: "Forbidden - User not authenticated"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-/portal/release:
+
+  /wallet/balance:
     get:
-      summary: Retrieve releases from Toolost
+      summary: "Get User Wallet Balance"
+      description: "Retrieve current wallet balance and financial information for the authenticated user"
+      tags: [Finance]
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: "Wallet balance information retrieved successfully"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Balance'
+        401:
+          description: "Unauthorized - Invalid or missing token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        403:
+          description: "Forbidden - User not authenticated"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /portal/release:
+    get:
+      summary: "Retrieve releases from Toolost"
       description: |
         Retrieves a paginated list of music releases from the Toolost API.  
-        This endpoint supports searching, filtering, sorting, and pagination.
+        Supports searching, filtering, sorting, and pagination.
       tags: [Releases]
       security:
         - bearerAuth: []
@@ -373,47 +592,23 @@ paths:
             default: "Late"
       responses:
         200:
-          description: List of releases successfully retrieved
+          description: "List of releases successfully retrieved"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ReleaseListResponse"
         401:
-          description: Unauthorized - Invalid or missing bearer token
+          description: "Unauthorized - Invalid or missing token"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
         500:
-          description: Server error retrieving releases
+          description: "Server error retrieving releases"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  
-  /portal/dashboard/wallet:
-  get:
-    summary: "Get User Wallet Balance"
-    description: "Retrieve current wallet balance and financial information for the authenticated user"
-    tags:
-      - Authentication
-      - Finance
-    security:
-      - BearerAuth: []
-    operationId: "getWalletBalance"
-    responses:
-      '200':
-        description: "Wallet balance information retrieved successfully"
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Balance"
-      '401':
-        $ref: "#/components/schemas/Error"
-      '403':
-        $ref: "#/components/schemas/Error"
 
 security:
   - bearerAuth: []
-
-
