@@ -189,94 +189,9 @@ components:
               nullable: true
               example: "http://toolost.com/api/portal/release?page=2"
 
-paths:
-  /auth/login:
-    post:
-      summary: User login to obtain bearer token
-      description: Authenticates user with email and password to receive JWT token for accessing protected endpoints
-      tags: [Authentication]
-      security: [] # No auth required for login
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/LoginRequest"
-      responses:
-        200:
-          description: Login successful
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/LoginResponse"
-        404:
-          description: Invalid credentials
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        500:
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
 
-  /auth/me:
-    get:
-      summary: Get current authenticated user profile
-      description: Returns detailed information about the currently authenticated user
-      tags: [Authentication]
-      security:
-        - bearerAuth: []
-      responses:
-        200:
-          description: User profile retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  user:
-                    type: object
-        401:
-          description: Unauthorized - Invalid or missing token
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        403:
-          description: Forbidden - User not authenticated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
-  
-  #/api/portal/dashboard/wallet:
-  get:
-    summary: "Get User Wallet Balance"
-    description: "Retrieve current wallet balance and financial information for the authenticated user"
-    tags:
-      - Authentication
-      - Finance
-    security:
-      - BearerAuth: []
-    operationId: "getWalletBalance"
-    responses:
-      '200':
-        description: "Wallet balance information retrieved successfully"
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Balance"
-      '401':
-        $ref: "#/components/schemas/Error"
-      '403':
-        $ref: "#/components/schemas/Error"
-
-#/components/schemas/Balance.json
-type: object
+Balance:
+      type: object
 required:
   - balance
 properties:
@@ -351,6 +266,154 @@ properties:
         description: YouTube MCN earnings
         example: 0
 
+
+
+              
+paths:
+  /auth/login:
+    post:
+      summary: User login to obtain bearer token
+      description: Authenticates user with email and password to receive JWT token for accessing protected endpoints
+      tags: [Authentication]
+      security: [] # No auth required for login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        200:
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        404:
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /auth/me:
+    get:
+      summary: Get current authenticated user profile
+      description: Returns detailed information about the currently authenticated user
+      tags: [Authentication]
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: User profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+        401:
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        403:
+          description: Forbidden - User not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+/portal/release:
+    get:
+      summary: Retrieve releases from Toolost
+      description: |
+        Retrieves a paginated list of music releases from the Toolost API.  
+        This endpoint supports searching, filtering, sorting, and pagination.
+      tags: [Releases]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Page number for pagination
+          schema:
+            type: integer
+            default: 1
+        - name: search
+          in: query
+          description: Search keyword (e.g., release title)
+          schema:
+            type: string
+            default: ""
+        - name: searchType
+          in: query
+          description: Field to search by (default is "Release Title")
+          schema:
+            type: string
+            default: "Release Title"
+        - name: filter
+          in: query
+          description: Filter results (e.g., "All")
+          schema:
+            type: string
+            default: "All"
+        - name: sort
+          in: query
+          description: Sort order for releases (e.g., "Late")
+          schema:
+            type: string
+            default: "Late"
+      responses:
+        200:
+          description: List of releases successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReleaseListResponse"
+        401:
+          description: Unauthorized - Invalid or missing bearer token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Server error retrieving releases
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  
+  /portal/dashboard/wallet:
+  get:
+    summary: "Get User Wallet Balance"
+    description: "Retrieve current wallet balance and financial information for the authenticated user"
+    tags:
+      - Authentication
+      - Finance
+    security:
+      - BearerAuth: []
+    operationId: "getWalletBalance"
+    responses:
+      '200':
+        description: "Wallet balance information retrieved successfully"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Balance"
+      '401':
+        $ref: "#/components/schemas/Error"
+      '403':
+        $ref: "#/components/schemas/Error"
+
 security:
   - bearerAuth: []
+
 
